@@ -77,7 +77,26 @@
         app:layout_constraintVertical_bias="0.120000005"
         app:srcCompat="@drawable/imgcriaturag" />
 
-    <SurfaceView
+    <TextView
+        android:id="@+id/text_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/forma"
+        android:text="Texto de prueba"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,3:2"
+        app:layout_constraintEnd_toStartOf="@+id/boton_mapa"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.monmisticuib.view.MapSurfaceView
         android:id="@+id/surfaceMapa"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -91,6 +110,44 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/surfaceMapa"
+        app:layout_constraintStart_toStartOf="@+id/surfaceMapa"
+        app:layout_constraintEnd_toEndOf="@+id/surfaceMapa">
+
+        <RadioButton
+            android:id="@+id/rbCriatures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Criatures"/>
+
+        <RadioButton
+            android:id="@+id/rbZones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zones"/>
+
+        <RadioButton
+            android:id="@+id/rbCapturades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capturades"/>
+
+        <RadioButton
+            android:id="@+id/rbEscapades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escapades"/>
+    </RadioGroup>
+
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -117,7 +174,7 @@
         app:layout_constraintEnd_toStartOf="@+id/zoom_out_max"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
-        app:srcCompat="@drawable/zoommin" />
+        app:srcCompat="@drawable/zoommax" />
 
     <ImageButton
         android:id="@+id/zoom_out_max"
@@ -129,7 +186,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
-        app:srcCompat="@drawable/zoommax" />
+        app:srcCompat="@drawable/zoommin" />
 
     <ImageButton
         android:id="@+id/zoom_in"
@@ -206,7 +263,7 @@
         android:backgroundTint="#E91E63"
         android:indeterminate="true"
         android:indeterminateTint="#FEFEFF"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/surfaceMapa"
         app:layout_constraintEnd_toEndOf="@+id/surfaceMapa"
         app:layout_constraintHorizontal_bias="0.459"

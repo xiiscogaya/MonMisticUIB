@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MonMisticUIB</string>
+    <string name="zoom_format">x%.2f</string>
 </resources>
