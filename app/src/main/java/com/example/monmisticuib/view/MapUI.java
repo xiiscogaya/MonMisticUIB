@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.example.monmisticuib.R;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapUI {
 
@@ -21,7 +21,7 @@ public class MapUI {
     public MapSurfaceView surfaceMapa;
     public ProgressBar progressLoading;
 
-    private final Set<View> views = new HashSet<>();
+    private final Map<String, View> viewMap = new HashMap<>();
 
     public MapUI(Activity activity) {
         progressLoading = activity.findViewById(R.id.progressLoading);
@@ -38,23 +38,23 @@ public class MapUI {
         surfaceMapa = activity.findViewById(R.id.surfaceMapa);
 
         // Añadir todas las vistas al set para controlarlas fácilmente
-        views.add(progressLoading);
-        views.add(btnZoomIn);
-        views.add(btnZoomOut);
-        views.add(btnZoomMax);
-        views.add(btnZoomMin);
-        views.add(tvZoomPercent);
-        views.add(tvZonaNom);
-        views.add(tvPunts);
-        views.add(etCercaZona);
-        views.add(surfaceMapa);
+        viewMap.put("progressLoading", progressLoading);
+        viewMap.put("btnZoomIn", btnZoomIn);
+        viewMap.put("btnZoomOut", btnZoomOut);
+        viewMap.put("btnZoomMax", btnZoomMax);
+        viewMap.put("btnZoomMin", btnZoomMin);
+        viewMap.put("tvZoomPercent", tvZoomPercent);
+        viewMap.put("tvZonaNom", tvZonaNom);
+        viewMap.put("tvPunts", tvPunts);
+        viewMap.put("etCercaZona", etCercaZona);
+        viewMap.put("surfaceMapa", surfaceMapa);
 
         show(false); // Ocultar por defecto
     }
 
     public void show(boolean visible) {
         int state = visible ? View.VISIBLE : View.GONE;
-        for (View v : views) {
+        for (View v : viewMap.values()) {
             v.setVisibility(state);
         }
     }

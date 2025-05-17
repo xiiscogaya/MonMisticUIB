@@ -9,29 +9,33 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
 import com.example.monmisticuib.R;
+import com.example.monmisticuib.model.Creature;
+import com.example.monmisticuib.model.Zone;
 import com.example.monmisticuib.view.MapUI;
 
 public class MapController {
     private final MapUI mapUI;
     private final Context context;
     private Bitmap mapaBitmap;
-    private final float zoomMax;
+    private final ZoneManager zoneManager;
+    private final CreatureGenerator creatureGenerator;
+
 
     private float cx, cy, zoomFactor, zoomMin;
     private final float zoomStepFactor = 1.25f;
-    private float lastTouchX = 0, lastTouchY = 0;
+    private final float zoomMax = 5.0f;
 
-    public MapController(MapUI mapUI, Context context) {
+    public MapController(MapUI mapUI, Context context, ZoneManager zoneManager, CreatureGenerator creatureGenerator) {
         this.mapUI = mapUI;
         this.context = context;
-
-        zoomMax = 5.0f;
+        this.zoneManager = zoneManager;
+        this.creatureGenerator = creatureGenerator;
     }
 
     public void toggleMapUI() {
@@ -56,11 +60,10 @@ public class MapController {
 
                 if (mapaBitmap == null) {
                     mapaBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mapam);
-
                     int bitmapWidth = mapaBitmap.getWidth();
                     int bitmapHeight = mapaBitmap.getHeight();
 
-                    // Calcular centro y zoom mínimo
+                    // Centro y zoom mínimo
                     cx = bitmapWidth / 2f;
                     cy = bitmapHeight / 2f;
 
@@ -77,16 +80,9 @@ public class MapController {
             new Handler(Looper.getMainLooper()).post(() -> {
                 mapUI.progressLoading.setVisibility(View.GONE);
                 updateZoomText();
+                updatePunts();
             });
         }).start();
-    }
-
-    private void quickDraw() {
-        SurfaceView surfaceView = mapUI.surfaceMapa;
-
-        if (surfaceView.getHolder().getSurface().isValid() && mapaBitmap != null) {
-            drawToCanvas(surfaceView);
-        }
     }
 
     private void drawToCanvas(SurfaceView surfaceView) {
@@ -95,8 +91,8 @@ public class MapController {
         int bitmapWidth = mapaBitmap.getWidth();
         int bitmapHeight = mapaBitmap.getHeight();
 
-        int visibleWidth = (int)(surfaceWidth / zoomFactor);
-        int visibleHeight = (int)(surfaceHeight / zoomFactor);
+        int visibleWidth = (int) (surfaceWidth / zoomFactor);
+        int visibleHeight = (int) (surfaceHeight / zoomFactor);
 
         float halfVisibleWidth = visibleWidth / 2f;
         float halfVisibleHeight = visibleHeight / 2f;
@@ -104,8 +100,8 @@ public class MapController {
         cx = Math.max(halfVisibleWidth, Math.min(cx, bitmapWidth - halfVisibleWidth));
         cy = Math.max(halfVisibleHeight, Math.min(cy, bitmapHeight - halfVisibleHeight));
 
-        int left = (int)(cx - halfVisibleWidth);
-        int top = (int)(cy - halfVisibleHeight);
+        int left = (int) (cx - halfVisibleWidth);
+        int top = (int) (cy - halfVisibleHeight);
         int right = left + visibleWidth;
         int bottom = top + visibleHeight;
 
@@ -116,16 +112,51 @@ public class MapController {
         if (canvas != null) {
             canvas.drawColor(Color.BLACK);
             canvas.drawBitmap(mapaBitmap, src, dst, new Paint());
+
+            // Círculo en el centro del mapa (jugador)
+            Paint playerPaint = new Paint();
+            playerPaint.setColor(Color.YELLOW);
+            playerPaint.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(surfaceWidth / 2f, surfaceHeight / 2f, 10, playerPaint);
+
             surfaceView.getHolder().unlockCanvasAndPost(canvas);
         }
+
+        updateZonaActual();
     }
 
-    public void setupSurfaceCallback() {
+
+    private void updateZonaActual() {
+        Zone zona = zoneManager.getZonaActual(cx, cy);
+        String nom = (zona != null) ? zona.getNomOficial() : "Fora de zona";
+
+        new Handler(Looper.getMainLooper()).post(() ->
+                mapUI.tvZonaNom.setText(nom)
+        );
+    }
+
+    public void updatePunts() {
+        int total = 0;
+        for (Creature c : creatureGenerator.getCapturades()) {
+            String genere = c.getGenre();
+            int punts = creatureGenerator.getAtributsPerGenere().get(genere).punts;
+            total += punts;
+        }
+
+        final String txt = context.getString(R.string.punts_format, total);
+
+        new Handler(Looper.getMainLooper()).post(() ->
+                mapUI.tvPunts.setText(txt)
+        );
+    }
+
+
+    public void setupSurfaceCallback(ScaleGestureDetector scaleDetector) {
         mapUI.surfaceMapa.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 drawMapImage();
-                setupTouchControls();
+                mapUI.surfaceMapa.setOnTouchListener(new MapTouchListener(MapController.this, scaleDetector));
             }
 
             @Override
@@ -133,35 +164,6 @@ public class MapController {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {}
-        });
-    }
-
-    public void setupTouchControls() {
-        mapUI.surfaceMapa.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    lastTouchX = event.getX();
-                    lastTouchY = event.getY();
-                    return true;
-
-                case MotionEvent.ACTION_MOVE:
-                    float dx = (lastTouchX - event.getX()) / zoomFactor;
-                    float dy = (lastTouchY - event.getY()) / zoomFactor;
-
-                    cx += dx;
-                    cy += dy;
-
-                    lastTouchX = event.getX();
-                    lastTouchY = event.getY();
-
-                    quickDraw();
-                    return true;
-
-                case MotionEvent.ACTION_UP:
-                    v.performClick();
-                    return true;
-            }
-            return false;
         });
     }
 
@@ -199,8 +201,39 @@ public class MapController {
         drawMapImage();
     }
 
+    public void adjustZoom(float scaleFactor) {
+        float nextZoom = zoomFactor * scaleFactor;
+        if (nextZoom < zoomMin) nextZoom = zoomMin;
+        if (nextZoom > zoomMax) nextZoom = zoomMax;
+
+        zoomFactor = nextZoom;
+        updateZoomText();
+        quickDraw();
+    }
+
+    public void quickDraw() {
+        if (mapUI.surfaceMapa.getHolder().getSurface().isValid()) {
+            drawToCanvas(mapUI.surfaceMapa);
+        }
+    }
+
+    public float getZoomFactor() {
+        return zoomFactor;
+    }
+
+    public void offsetCenter(float dx, float dy) {
+        cx += dx;
+        cy += dy;
+    }
+
     private void updateZoomText() {
         String zoomText = context.getString(R.string.zoom_format, zoomFactor);
         mapUI.tvZoomPercent.setText(zoomText);
     }
+
+    public void setCenter(float x, float y) {
+        this.cx = x;
+        this.cy = y;
+    }
+
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- TextView informativo -->
+    <TextView
+        android:id="@+id/text_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/forma"
+        android:text="Texto de prueba"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        app:layout_constraintEnd_toStartOf="@id/boton_mapa"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintDimensionRatio="H,3:2" />
+
+    <!-- RadioButtons de selección -->
+    <RadioGroup
+        android:id="@+id/radioGroupInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/surfaceMapa"
+        app:layout_constraintStart_toStartOf="@id/surfaceMapa"
+        app:layout_constraintEnd_toEndOf="@id/surfaceMapa">
+
+        <RadioButton
+            android:id="@+id/rbCriatures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Criatures" />
+
+        <RadioButton
+            android:id="@+id/rbZones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zones" />
+
+        <RadioButton
+            android:id="@+id/rbCapturades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capturades" />
+
+        <RadioButton
+            android:id="@+id/rbEscapades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escapades" />
+    </RadioGroup>
+
+</merge>

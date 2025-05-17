@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- SurfaceView del mapa -->
+    <com.example.monmisticuib.view.MapSurfaceView
+        android:id="@+id/surfaceMapa"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        app:layout_constraintEnd_toStartOf="@id/boton_mapa"
+        app:layout_constraintDimensionRatio="H,3:2" />
+
+    <!-- Botones de zoom -->
+    <ImageButton
+        android:id="@+id/zoom_in"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/zoomout"
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline" />
+
+    <ImageButton
+        android:id="@+id/zoom_out"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/zoomin"
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline" />
+
+    <ImageButton
+        android:id="@+id/zoom_in_min"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/zoommax"
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/zoom_out_max" />
+
+    <ImageButton
+        android:id="@+id/zoom_out_max"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/zoommin"
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline3" />
+
+    <!-- Textos informativos -->
+    <TextView
+        android:id="@+id/text_zona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Plano General"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="@id/surfaceMapa"
+        app:layout_constraintStart_toStartOf="@id/guideline3" />
+
+    <TextView
+        android:id="@+id/text_zoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="x1.00"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/text_zona"
+        app:layout_constraintStart_toStartOf="@id/guideline3" />
+
+    <TextView
+        android:id="@+id/text_puntos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0 puntos"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="@id/surfaceMapa"
+        app:layout_constraintEnd_toEndOf="@id/surfaceMapa" />
+
+    <!-- EditText para buscar zonas -->
+    <EditText
+        android:id="@+id/text_buscar_zona"
+        android:layout_width="110dp"
+        android:layout_height="43dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Buscar Zona"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/boton_inventario"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toStartOf="@id/guideline" />
+
+    <!-- Barra de progreso de carga -->
+    <ProgressBar
+        android:id="@+id/progressLoading"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+        android:layout_width="81dp"
+        android:layout_height="86dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="#FEFEFF"
+        android:backgroundTint="#E91E63"
+        app:layout_constraintTop_toTopOf="@id/surfaceMapa"
+        app:layout_constraintBottom_toBottomOf="@id/surfaceMapa"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        app:layout_constraintEnd_toEndOf="@id/surfaceMapa"
+        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintVertical_bias="0.489" />
+
+</merge>
